@@ -115,6 +115,48 @@ namespace ShouldIRestock
             }
         }
 
+        // 游戏按界面名字把缩放档位记进存档。便签每次重建都要带上同一个名字，关掉再开才回到上次的大小。
+        public static void RememberZoom(PaperUI paper)
+        {
+            if (paper == null || paper.Root == null)
+            {
+                return;
+            }
+
+            StoreUI zoom = paper.Root.GetComponent<StoreUI>();
+            if (zoom == null)
+            {
+                return;
+            }
+
+            zoom.identifier = ModIds.Id + "_" + ModIds.BookId;
+            ApplySavedZoom(zoom);
+        }
+
+        private static void ApplySavedZoom(StoreUI zoom)
+        {
+            int level = 1;
+            if (PlayerStore.Instance != null && PlayerStore.Instance.storeUIZoomLevels != null)
+            {
+                int saved;
+                if (PlayerStore.Instance.storeUIZoomLevels.TryGetValue(zoom.identifier, out saved))
+                {
+                    level = saved;
+                }
+            }
+
+            Transform target = zoom.zoomRoot != null ? zoom.zoomRoot : zoom.transform;
+            float scale = level == 3 ? zoom.zoomScaleAlt2 : level == 2 ? zoom.zoomScaleAlt : zoom.zoomScaleNormal;
+            UIDragHandler drag;
+            if (target == zoom.transform && zoom.TryGetComponent(out drag))
+            {
+                drag.SetHomeScale(scale);
+                scale *= drag.DockScaleRatio;
+            }
+
+            target.localScale = new Vector3(scale, scale, target.localScale.z);
+        }
+
         public static void ClearSelection()
         {
             if (EventSystem.current != null)

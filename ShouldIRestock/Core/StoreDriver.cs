@@ -24,6 +24,7 @@ namespace ShouldIRestock
             ItemExcludeWindow.Tick();
             StickyNote.Follow();
             StickyNote.PollClick();
+            PaperBoard.Place();
             if (Time.unscaledTime < nextScan)
             {
                 return;

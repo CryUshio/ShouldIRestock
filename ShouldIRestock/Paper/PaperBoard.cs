@@ -17,7 +17,7 @@ namespace ShouldIRestock
 
         public static void Sync(StockSnapshot shot)
         {
-            if (paper == null || !paper.IsAlive || !paper.IsVisible || shot == null)
+            if (paper == null || !paper.IsAlive || shot == null)
             {
                 return;
             }
@@ -42,8 +42,14 @@ namespace ShouldIRestock
             Open(shot ?? StockScanner.Scan());
         }
 
+        public static void Place()
+        {
+            PaperPlace.Tick(paper);
+        }
+
         public static void Close()
         {
+            PaperPlace.Capture(paper);
             TagHighlighter.ClearHover();
             try
             {
@@ -94,6 +100,8 @@ namespace ShouldIRestock
             paper.Closed += OnClosed;
             paper.PageShown += OnPageShown;
             paper.Show();
+            BookChrome.RememberZoom(paper);
+            PaperPlace.Arm();
             Bind();
             BookChrome.ClearSelection();
         }
@@ -124,6 +132,39 @@ namespace ShouldIRestock
             }
             catch
             {
+            }
+
+            List<PaperUI.Binding> bindings = null;
+            try
+            {
+                bindings = paper.VisibleBindings();
+            }
+            catch
+            {
+                return;
+            }
+
+            if (bindings == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < bindings.Count; i++)
+            {
+                PaperUI.Binding binding = bindings[i];
+                if (binding == null || binding.data == null || binding.data.id != id)
+                {
+                    continue;
+                }
+
+                binding.data.text = label;
+                if (binding.text == null)
+                {
+                    continue;
+                }
+
+                binding.text.text = label;
+                binding.text.ForceMeshUpdate();
             }
         }
 
@@ -156,12 +197,19 @@ namespace ShouldIRestock
 
         private static void OnClosed(PaperUI ui)
         {
-            TagHighlighter.ClearHover();
-            if (paper == ui)
+            if (paper != ui)
             {
-                paper = null;
-                signature = "";
+                return;
             }
+
+            if (ui != null && ui.IsAlive)
+            {
+                return;
+            }
+
+            TagHighlighter.ClearHover();
+            paper = null;
+            signature = "";
         }
 
         private static void Bind()

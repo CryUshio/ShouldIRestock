@@ -3,10 +3,12 @@
   <ID>should_i_restock</ID>
   <Name>要不要进货 Inventory Category Stats</Name>
   <Author>Oniisama</Author>
-  <ModVersion>1.1.1</ModVersion>
+  <ModVersion>1.1.2</ModVersion>
   <Description>在柜台电话下沿贴一张便签。点开后按游戏标签做物品分类统计：每行一个品类、颜色和件数，并记下赃物与违禁品。悬停高亮对应库存，点击锁定后不再跟着别的标签变。用来看品类记录和标签记录，决定要不要进货。
 
 便签右上角的扳手打开游戏内设置，改完立刻生效。
+便签开着时，件数会跟着库存变，按每一叠的数量计。
+缩放档位和拖动位置都会记住。分辨率变了以后，便签仍会留在画面里。
 
 基础
 - 跳过上锁容器里的货（默认开启）
@@ -31,6 +33,8 @@
 A sticky note sits under the counter phone. Open it for a tally by the game's own tags: each row shows a category, its color, and a count, and stolen goods and contraband are noted too. Hover a row to outline that stock; click to lock the highlight so it stays put when you look at another tag. Use it to read the category and tag records and decide whether to restock.
 
 The wrench at the top right of the note opens the in-game settings. Changes apply immediately.
+While the note stays open, counts follow the stock and include the size of each stack.
+Zoom and drag position are remembered. If the resolution changes, the note stays on screen.
 
 General
 - Skip goods inside locked containers (on by default)

@@ -155,14 +155,15 @@ namespace ShouldIRestock
             for (int i = 0; i < shot.Pieces.Count; i++)
             {
                 StockPiece piece = shot.Pieces[i];
+                int units = Units(piece.Item);
                 if (piece.Stolen)
                 {
-                    shot.Stolen++;
+                    shot.Stolen += units;
                 }
 
                 if (piece.Contraband)
                 {
-                    shot.Contraband++;
+                    shot.Contraband += units;
                 }
 
                 if (piece.Excluded)
@@ -172,10 +173,10 @@ namespace ShouldIRestock
 
                 if (piece.Tags.Count == 0)
                 {
-                    shot.Other++;
-                    other.Count++;
-                    if (piece.Stolen) other.Stolen++;
-                    if (piece.Contraband) other.Contraband++;
+                    shot.Other += units;
+                    other.Count += units;
+                    if (piece.Stolen) other.Stolen += units;
+                    if (piece.Contraband) other.Contraband += units;
                     continue;
                 }
 
@@ -193,9 +194,9 @@ namespace ShouldIRestock
                         counts[row.Id] = row;
                     }
 
-                    row.Count++;
-                    if (piece.Stolen) row.Stolen++;
-                    if (piece.Contraband) row.Contraband++;
+                    row.Count += units;
+                    if (piece.Stolen) row.Stolen += units;
+                    if (piece.Contraband) row.Contraband += units;
                 }
             }
 
@@ -245,6 +246,19 @@ namespace ShouldIRestock
             }
 
             shot.Signature = signature.ToString();
+        }
+
+        private static int Units(GameItem item)
+        {
+            try
+            {
+                int count = item != null ? item.unitCount : 1;
+                return count > 0 ? count : 1;
+            }
+            catch
+            {
+                return 1;
+            }
         }
 
         private static GameInventory Read(System.Func<GameInventory> get)
