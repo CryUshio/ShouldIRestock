@@ -3,7 +3,7 @@
   <ID>should_i_restock</ID>
   <Name>要不要进货 Inventory Category Stats</Name>
   <Author>Oniisama</Author>
-  <ModVersion>1.1.0</ModVersion>
+  <ModVersion>1.1.1</ModVersion>
   <Description>在柜台电话下沿贴一张便签。点开后按游戏标签做物品分类统计：每行一个品类、颜色和件数，并记下赃物与违禁品。悬停高亮对应库存，点击锁定后不再跟着别的标签变。用来看品类记录和标签记录，决定要不要进货。
 
 便签右上角的扳手打开游戏内设置，改完立刻生效。
@@ -18,6 +18,7 @@
 显示类型
 赃物、违禁品和基础类型默认显示。
 细分类型和未归类默认不显示。
+勾选的类型都会出现在便签上，没有库存也显示 0。
 
 排除标签
 勾选的细分标签整件不计入品类，也不描边。
@@ -41,6 +42,7 @@ General
 Show types
 Stolen goods, contraband, and the main types are shown by default.
 Detail types and Uncategorized stay off.
+Every checked type appears on the note, including a count of 0.
 
 Exclude tags
 A checked detail tag drops the whole item from category rows and outlines.

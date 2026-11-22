@@ -199,6 +199,19 @@ namespace ShouldIRestock
                 }
             }
 
+            // 勾选即占一行，没有库存也显示 0，这样开关会立刻反映到便签上。
+            List<string> shown = ShownTypes.IdsInOrder();
+            for (int i = 0; i < shown.Count; i++)
+            {
+                string id = shown[i];
+                if (id == ModIds.Stolen || id == ModIds.Contraband || id == ModIds.Other || counts.ContainsKey(id) || !Settings.Shows(id))
+                {
+                    continue;
+                }
+
+                counts[id] = new TagRow { Id = id, Name = TagCatalog.NameOf(id) };
+            }
+
             var rows = new List<TagRow>();
             if (Settings.Shows(ModIds.Stolen))
             {
@@ -218,7 +231,7 @@ namespace ShouldIRestock
             });
             rows.AddRange(types);
 
-            if (other.Count > 0 && Settings.Shows(ModIds.Other))
+            if (Settings.Shows(ModIds.Other))
             {
                 rows.Add(other);
             }
