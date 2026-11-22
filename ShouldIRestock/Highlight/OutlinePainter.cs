@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +9,6 @@ namespace ShouldIRestock
         public GameObject Root;
         public RectTransform Rect;
         public ItemFrameGraphic Outline;
-        public Image StolenMark;
-        public Image ContrabandMark;
         public bool Visible;
 
         public static ItemFrame Create(RectTransform parent)
@@ -30,17 +28,10 @@ namespace ShouldIRestock
             rect.pivot = new Vector2(0.5f, 0.5f);
             var outline = root.AddComponent<ItemFrameGraphic>();
             outline.raycastTarget = false;
-            return new ItemFrame
-            {
-                Root = root,
-                Rect = rect,
-                Outline = outline,
-                StolenMark = Mark(rect, "SIR_Stolen", new Vector2(0f, 1f), new Color(1f, 0.7f, 0.1f, 0.95f)),
-                ContrabandMark = Mark(rect, "SIR_Contraband", new Vector2(1f, 1f), new Color(0.95f, 0.22f, 0.2f, 0.95f))
-            };
+            return new ItemFrame { Root = root, Rect = rect, Outline = outline };
         }
 
-        public void Apply(Color color, bool[] cells, int cols, int rows, float width, float height, bool flipped, bool stolen, bool contraband)
+        public void Apply(Color color, bool[] cells, int cols, int rows, float width, float height, bool flipped)
         {
             if (Outline == null)
             {
@@ -51,10 +42,9 @@ namespace ShouldIRestock
             Visible = true;
             Outline.color = color;
             Outline.Configure(cells, cols, rows, width, height, Settings.LineThickness);
-            float mirror = flipped ? -1f : 1f;
+            float inheritedMirror = Rect.parent != null && Rect.parent.localScale.x < 0f ? -1f : 1f;
+            float mirror = (flipped ? -1f : 1f) * inheritedMirror;
             Root.transform.localScale = new Vector3(mirror, 1f, 1f);
-            StolenMark.gameObject.SetActive(stolen);
-            ContrabandMark.gameObject.SetActive(contraband);
         }
 
         public void Hide()
@@ -77,23 +67,6 @@ namespace ShouldIRestock
             }
 
             Root = null;
-        }
-
-        private static Image Mark(RectTransform parent, string name, Vector2 anchor, Color color)
-        {
-            var go = new GameObject(name);
-            go.transform.SetParent(parent, false);
-            var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = anchor;
-            rect.anchorMax = anchor;
-            rect.pivot = anchor;
-            rect.sizeDelta = new Vector2(7f, 7f);
-            rect.anchoredPosition = Vector2.zero;
-            var image = go.AddComponent<Image>();
-            image.color = color;
-            image.raycastTarget = false;
-            go.SetActive(false);
-            return image;
         }
     }
 
@@ -163,22 +136,7 @@ namespace ShouldIRestock
                 return false;
             }
 
-            if (active == ModIds.Stolen)
-            {
-                return piece.Stolen;
-            }
-
-            if (active == ModIds.Contraband)
-            {
-                return piece.Contraband;
-            }
-
-            if (active == ModIds.Other)
-            {
-                return piece.Tags.Count == 0;
-            }
-
-            return piece.Tags.Contains(active);
+            return piece.Has(active);
         }
 
         private static void Paint(ItemFrame frame, StockPiece piece, string active)
@@ -210,10 +168,7 @@ namespace ShouldIRestock
             int cols;
             int rows;
             bool[] cells = ShapeMask.Read(shape, out cols, out rows);
-            Color color = TagCatalog.ColorOf(active);
-            bool markStolen = piece.Stolen && active != ModIds.Stolen;
-            bool markContraband = piece.Contraband && active != ModIds.Contraband;
-            frame.Apply(color, cells, cols, rows, width, height, flipped, markStolen, markContraband);
+            frame.Apply(TagCatalog.OutlineColor(piece.Style(active)), cells, cols, rows, width, height, flipped);
         }
 
         private static ItemFrame Ensure(GameItemElement element)
@@ -259,9 +214,17 @@ namespace ShouldIRestock
             shape = null;
             try
             {
-                shape = element.modifiedShape ?? element.shape;
-                flipped = (element.shape != null && element.shape.flipped) || (element.modifiedShape != null && element.modifiedShape.flipped);
-                bool rotated = element.shape != null && element.shape.orientation != 0;
+                GridShape original = element.shape;
+                GridShape modified = element.modifiedShape;
+                flipped = (original != null && original.flipped) || (modified != null && modified.flipped);
+                bool rotated = (original != null && original.orientation != 0)
+                    || (modified != null && modified.orientation != 0);
+
+                // 与 hollow.clientdemandhighlight 一致：普通物品的形状由 rotator 负责旋转，
+                // 这里仍读原始 mask，避免把 modifiedShape 的旋转再应用一次。
+                // 只有模块化枪械需要用 modifiedShape（它包含配件后的真实轮廓）。
+                bool modularGun = element.IsTag("ADV_GUN_TAG");
+                shape = modularGun ? (modified ?? original) : original;
                 if (rotated && element.rotator != null)
                 {
                     anchor = element.rotator.rectTransform;

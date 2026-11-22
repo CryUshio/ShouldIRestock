@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace ShouldIRestock
@@ -91,6 +91,7 @@ namespace ShouldIRestock
                     Tags = TagCatalog.Match(item)
                 };
                 shot.Pieces.Add(piece);
+                shot.Index[item] = piece;
             }
 
             if (Settings.IgnoreLocked != null && Settings.IgnoreLocked.Value && Legality.IsLockedContainer(item))
@@ -117,18 +118,29 @@ namespace ShouldIRestock
             {
                 WalkItem(children[i], seen, shot);
             }
+
+            StockPiece self;
+            if (!shot.Index.TryGetValue(item, out self))
+            {
+                return;
+            }
+
+            for (int i = 0; i < children.Count; i++)
+            {
+                StockPiece inner;
+                if (children[i] == null || !shot.Index.TryGetValue(children[i], out inner))
+                {
+                    continue;
+                }
+
+                self.Inner.Add(inner);
+            }
         }
 
         private static void BuildRows(StockSnapshot shot)
         {
             var counts = new Dictionary<string, TagRow>();
-            IReadOnlyList<TagInfo> tags = TagCatalog.Tags;
-            for (int i = 0; i < tags.Count; i++)
-            {
-                counts[tags[i].Id] = new TagRow { Id = tags[i].Id, Name = tags[i].Name };
-            }
-
-            var other = new TagRow { Id = ModIds.Other, Name = Text.L("tag_other", "未归类") };
+            var other = new TagRow { Id = ModIds.Other, Name = Text.L("tag_other", "Uncategorized") };
             for (int i = 0; i < shot.Pieces.Count; i++)
             {
                 StockPiece piece = shot.Pieces[i];
@@ -153,10 +165,16 @@ namespace ShouldIRestock
 
                 for (int t = 0; t < piece.Tags.Count; t++)
                 {
+                    if (!Settings.Shows(piece.Tags[t]))
+                    {
+                        continue;
+                    }
+
                     TagRow row;
                     if (!counts.TryGetValue(piece.Tags[t], out row))
                     {
-                        continue;
+                        row = new TagRow { Id = piece.Tags[t], Name = TagCatalog.NameOf(piece.Tags[t]) };
+                        counts[row.Id] = row;
                     }
 
                     row.Count++;
@@ -166,16 +184,25 @@ namespace ShouldIRestock
             }
 
             var rows = new List<TagRow>();
-            for (int i = 0; i < tags.Count; i++)
+            if (Settings.Shows(ModIds.Stolen))
             {
-                TagRow row = counts[tags[i].Id];
-                if (row.Count > 0)
-                {
-                    rows.Add(row);
-                }
+                rows.Add(new TagRow { Id = ModIds.Stolen, Name = Text.L("all_stolen", "All stolen"), Count = shot.Stolen });
             }
 
-            if (other.Count > 0)
+            if (Settings.Shows(ModIds.Contraband))
+            {
+                rows.Add(new TagRow { Id = ModIds.Contraband, Name = Text.L("all_contraband", "All contraband"), Count = shot.Contraband });
+            }
+
+            var types = new List<TagRow>(counts.Values);
+            types.Sort((a, b) =>
+            {
+                int byOrder = TagCatalog.OrderOf(a.Id).CompareTo(TagCatalog.OrderOf(b.Id));
+                return byOrder != 0 ? byOrder : string.CompareOrdinal(a.Id, b.Id);
+            });
+            rows.AddRange(types);
+
+            if (other.Count > 0 && Settings.Shows(ModIds.Other))
             {
                 rows.Add(other);
             }

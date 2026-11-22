@@ -29,6 +29,18 @@
       <HintPath>$(GameDir)\Probably Stolen_Data\Managed\UnityEngine.UIModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(GameDir)\Probably Stolen_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>$(GameDir)\Probably Stolen_Data\Managed\UnityEngine.Physics2DModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Localization">
+      <HintPath>$(GameDir)\Probably Stolen_Data\Managed\Unity.Localization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>$(GameDir)\Probably Stolen_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
       <Private>false</Private>
@@ -53,13 +65,24 @@
     <None Include="Localization\**\*.*" CopyToOutputDirectory="Never" />
   </ItemGroup>
 
-  <Target Name="DeployMod" AfterTargets="Build" Condition="'$(DeployToMods)' != 'false'">
+  <Target Name="PackMod" AfterTargets="Build">
     <PropertyGroup>
-      <ModOut>$(GameDir)\Mods\should_i_restock</ModOut>
+      <ModOut>$(MSBuildProjectDirectory)\bin\$(Configuration)\should_i_restock</ModOut>
     </PropertyGroup>
     <MakeDir Directories="$(ModOut)\Textures\Paper;$(ModOut)\Localization" />
     <Copy SourceFiles="$(TargetPath);$(MSBuildProjectDirectory)\manifest.xml" DestinationFolder="$(ModOut)" SkipUnchangedFiles="false" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Textures\Paper\sticky_note.png;$(MSBuildProjectDirectory)\Textures\Paper\sticky_sheet.png" DestinationFolder="$(ModOut)\Textures\Paper" SkipUnchangedFiles="false" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Localization\zh.csv;$(MSBuildProjectDirectory)\Localization\en.csv" DestinationFolder="$(ModOut)\Localization" SkipUnchangedFiles="false" />
+    <ItemGroup>
+      <PaperTexture Include="$(MSBuildProjectDirectory)\Textures\Paper\*.png" />
+      <LocaleFile Include="$(MSBuildProjectDirectory)\Localization\*.csv" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PaperTexture)" DestinationFolder="$(ModOut)\Textures\Paper" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(LocaleFile)" DestinationFolder="$(ModOut)\Localization" SkipUnchangedFiles="false" />
+  </Target>
+
+  <Target Name="DeployMod" AfterTargets="PackMod" Condition="'$(DeployToMods)' != 'false' and '$(GameDir)' != ''">
+    <ItemGroup>
+      <PackedMod Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\should_i_restock\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PackedMod)" DestinationFiles="@(PackedMod->'$(GameDir)\Mods\should_i_restock\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="false" />
   </Target>
 </Project>

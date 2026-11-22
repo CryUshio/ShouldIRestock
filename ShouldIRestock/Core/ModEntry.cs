@@ -6,7 +6,7 @@ namespace ShouldIRestock
         {
             Log.Bind(manifest);
             Settings.Init();
-            Log.Msg(Text.L("loaded", "要不要进货已加载。进店后，便签会贴在电话下沿。"));
+            Log.Msg(Text.L("loaded", "Should I Restock is loaded. The note sticks under the phone once you are in the shop."));
         }
 
         public void OnEnable()

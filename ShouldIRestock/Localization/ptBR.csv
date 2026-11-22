@@ -1,0 +1,18 @@
+# ptBR.csv
+loaded,要不要进货 foi carregado. Na loja, o bilhete gruda embaixo do telefone.
+title,Repor? Inventory Category Stats
+page_name,Página {0}
+all_stolen,Todos os roubados
+all_contraband,Todo o contrabando
+stolen_n,roubado {0}
+contraband_n,contrabando {0}
+tag_other,Sem categoria
+opt_ignore_locked,Não contar o que está em recipientes trancados
+opt_ignore_locked_tip,Caixas trancadas e o que está atrás da trava ficam fora da contagem e do contorno.
+opt_skip_debris,Ignorar entulho
+opt_skip_debris_tip,Pilhas que não dá para mover não entram no estoque.
+opt_thickness,Espessura do contorno
+opt_thickness_tip,Espessura em pixels do contorno do item.
+opt_scan,Intervalo de atualização do estoque (segundos)
+opt_scan_tip,De quanto em quanto as quantidades e os contornos são recalculados.
+opt_types,Mostrar estes tipos

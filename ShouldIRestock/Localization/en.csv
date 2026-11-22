@@ -1,6 +1,6 @@
 # en.csv
 loaded,Should I Restock is loaded. The note sticks under the phone once you are in the shop.
-title,Inventory Category Stats
+title,要不要进货 Inventory Category Stats
 page_name,Page {0}
 all_stolen,All stolen
 all_contraband,All contraband
@@ -15,46 +15,4 @@ opt_thickness,Outline thickness
 opt_thickness_tip,Pixel thickness of the item outline.
 opt_scan,Stock refresh interval (seconds)
 opt_scan_tip,How often the counts and outlines are recalculated.
-tag_FOOD_ITEM_TAG,Food
-tag_FRESH_FOOD_TAG,Fresh food
-tag_CANNED_FOOD_TAG,Canned food
-tag_SNACK_TAG,Snacks
-tag_MEAT_FOOD_TAG,Meat
-tag_BERRY_TAG,Berries
-tag_SEED_TAG,Seeds
-tag_SEED_ITEM_TAG,Seed items
-tag_ANIMAL_ITEM_TAG,Animals
-tag_FISH_ITEM_TAG,Fish
-tag_CHEM_ITEM_TAG,Chemicals
-tag_DRUG_TAG,Drugs
-tag_MEDICAL_ITEM_TAG,Medical
-tag_MEDICAL_SUPPLY_TAG,Medical supplies
-tag_FUEL_ITEM_TAG,Fuel
-tag_EXOTIC_FUEL_TAG,Exotic fuel
-tag_PLASMA_CELL_TAG,Plasma cells
-tag_ENERGY_CELL,Energy cells
-tag_MELEE_WEAPON_TAG,Melee weapons
-tag_SERVICE_GUN_TAG,Service guns
-tag_ANTIQUE_FIREARM_TAG,Antique firearms
-tag_GUN_FRAME_TAG,Gun frames
-tag_ARMOR_ITEM_TAG,Armor
-tag_AMMO_BOX_TAG,Ammo
-tag_BOOK_TAG,Books
-tag_CASSETTE_TAG,Cassettes
-tag_GEMSTONE_TAG,Gemstones
-tag_ELECTRONIC_PART_TAG,Electronic parts
-tag_CONSTRUCTION_MATERIAL_TAG,Building materials
-tag_WINE_INGREDIENT_TAG,Wine ingredients
-tag_ALCOHOL_TAG,Alcohol
-tag_CIGARETTE_TAG,Cigarettes
-tag_WATER_BOTTLE_ITEM_TAG,Water bottles
-tag_ORGAN_ITEM_TAG,Organs
-tag_NAV_DISK_TAG,Nav disks
-tag_PERMIT_ITEM_TAG,Permits
-tag_AMENITY_ITEM_TAG,Amenities
-tag_MACHINERY_TAG,Machines
-tag_TOOLBOX_TAG,Toolboxes
-tag_PRINTER_CHIP_TAG,Chips
-tag_MODULE,Modules
-tag_NODE,Nodes
-tag_SALVAGABLE_ITEM_TAG,Salvage
+opt_types,Show these types

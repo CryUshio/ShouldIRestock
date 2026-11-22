@@ -1,0 +1,18 @@
+# fr.csv
+loaded,要不要进货 est chargé. Dans la boutique, le pense-bête se colle sous le téléphone.
+title,Réapprovisionner ? Inventory Category Stats
+page_name,Page {0}
+all_stolen,Tous les objets volés
+all_contraband,Toute la contrebande
+stolen_n,volé {0}
+contraband_n,contrebande {0}
+tag_other,Non classé
+opt_ignore_locked,Ignorer le contenu des contenants verrouillés
+opt_ignore_locked_tip,Les caisses verrouillées et leur contenu ne sont ni comptés ni entourés.
+opt_skip_debris,Ignorer les débris
+opt_skip_debris_tip,Les tas impossibles à déplacer ne comptent pas dans le stock.
+opt_thickness,Épaisseur du contour
+opt_thickness_tip,Épaisseur en pixels du contour des objets.
+opt_scan,Intervalle de mise à jour du stock (secondes)
+opt_scan_tip,Fréquence de recalcul des quantités et des contours.
+opt_types,Afficher ces types

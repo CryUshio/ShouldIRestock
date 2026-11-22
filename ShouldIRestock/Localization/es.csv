@@ -1,0 +1,18 @@
+# es.csv
+loaded,要不要进货 está cargado. En la tienda, la nota se pega bajo el teléfono.
+title,¿Reponer? Inventory Category Stats
+page_name,Página {0}
+all_stolen,Todos los objetos robados
+all_contraband,Todo el contrabando
+stolen_n,robado {0}
+contraband_n,contrabando {0}
+tag_other,Sin clasificar
+opt_ignore_locked,No contar lo de dentro de los contenedores bloqueados
+opt_ignore_locked_tip,Las cajas bloqueadas y lo que hay tras el bloqueo no entran en el recuento ni en el contorno.
+opt_skip_debris,Omitir escombros
+opt_skip_debris_tip,Los montones que no se pueden mover no cuentan como existencias.
+opt_thickness,Grosor del contorno
+opt_thickness_tip,Grosor en píxeles del contorno de los objetos.
+opt_scan,Intervalo de actualización de existencias (segundos)
+opt_scan_tip,Cada cuánto se recalculan las cantidades y los contornos.
+opt_types,Mostrar estos tipos

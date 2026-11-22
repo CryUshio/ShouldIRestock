@@ -1,11 +1,17 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace ShouldIRestock
 {
     public static class PaperBoard
     {
-        private const int RowsPerPage = 10;
+        private const int RowsPerPage = 13;
+        private const float TitleSize = 12f;
+        private const float TitleY = 8f;
+        private const float RowTop = 30f;
+        private const float RowStep = 20f;
+        private const float RowHeight = 18f;
         private static PaperUI paper;
         private static string signature = "";
 
@@ -62,37 +68,25 @@ namespace ShouldIRestock
         {
             Close();
             signature = shot.Signature;
-            int pages = Mathf.Max(1, Mathf.CeilToInt((shot.Rows.Count + 2) / (float)RowsPerPage));
+            int pages = Mathf.Max(1, Mathf.CeilToInt(shot.Rows.Count / (float)RowsPerPage));
             paper = ModHelper.CreatePaper(ModIds.Id, ModIds.BookId, "sticky_sheet");
+            BookChrome.Apply(paper);
             for (int page = 0; page < pages; page++)
             {
-                paper.AddPage(Text.F("page_name", "第 {0} 页", page + 1));
-                paper.AddText(16f, 10f, 216f, 18f, Text.L("title", "要不要进货"), "handwritten", "title_" + page, "left", 11f);
-                int reserved = page == 0 ? 2 : 0;
-                int start = page == 0 ? 0 : page * RowsPerPage - 2;
+                paper.AddPage(Text.F("page_name", "Page {0}", page + 1));
+                paper.AddText(12f, TitleY, 224f, 20f, Text.L("title", "要不要进货 Inventory Category Stats"), "handwritten", "title_" + page, "left", TitleSize);
+                int start = page * RowsPerPage;
                 for (int slot = 0; slot < RowsPerPage; slot++)
                 {
-                    float y = 34f + slot * 22f;
-                    if (page == 0 && slot == 0)
+                    int rowIndex = start + slot;
+                    if (rowIndex >= shot.Rows.Count)
                     {
-                        AddRow(ModIds.Stolen, y, Label(Text.L("all_stolen", "全部赃物"), TagCatalog.ColorOf(ModIds.Stolen), shot.Stolen, 0, 0, false));
-                        continue;
-                    }
-
-                    if (page == 0 && slot == 1)
-                    {
-                        AddRow(ModIds.Contraband, y, Label(Text.L("all_contraband", "全部违禁品"), TagCatalog.ColorOf(ModIds.Contraband), shot.Contraband, 0, 0, false));
-                        continue;
-                    }
-
-                    int rowIndex = start + slot - reserved;
-                    if (rowIndex < 0 || rowIndex >= shot.Rows.Count)
-                    {
-                        continue;
+                        break;
                     }
 
                     TagRow row = shot.Rows[rowIndex];
-                    AddRow(row.Id, y, Label(row.Name, TagCatalog.ColorOf(row.Id), row.Count, row.Stolen, row.Contraband, true));
+                    bool special = row.Id == ModIds.Stolen || row.Id == ModIds.Contraband;
+                    AddRow(row.Id, RowTop + slot * RowStep, Label(row.Id, row.Name, TagCatalog.ColorOf(row.Id), row.Count, row.Stolen, row.Contraband, !special));
                 }
             }
 
@@ -100,23 +94,25 @@ namespace ShouldIRestock
             paper.PageShown += OnPageShown;
             paper.Show();
             Bind();
+            BookChrome.ClearSelection();
         }
 
         private static void AddRow(string id, float y, string label)
         {
             string rowId = "row_" + id;
-            paper.AddButton(14f, y, 220f, 20f, label, () => TagHighlighter.ToggleLock(id), rowId);
+            paper.AddButton(22f, y, 208f, RowHeight, label, () => TagHighlighter.ToggleLock(id), rowId);
         }
 
         private static void Write(StockSnapshot shot)
         {
-            Set("row_" + ModIds.Stolen, Label(Text.L("all_stolen", "全部赃物"), TagCatalog.ColorOf(ModIds.Stolen), shot.Stolen, 0, 0, false));
-            Set("row_" + ModIds.Contraband, Label(Text.L("all_contraband", "全部违禁品"), TagCatalog.ColorOf(ModIds.Contraband), shot.Contraband, 0, 0, false));
             for (int i = 0; i < shot.Rows.Count; i++)
             {
                 TagRow row = shot.Rows[i];
-                Set("row_" + row.Id, Label(row.Name, TagCatalog.ColorOf(row.Id), row.Count, row.Stolen, row.Contraband, true));
+                bool special = row.Id == ModIds.Stolen || row.Id == ModIds.Contraband;
+                Set("row_" + row.Id, Label(row.Id, row.Name, TagCatalog.ColorOf(row.Id), row.Count, row.Stolen, row.Contraband, !special));
             }
+
+            Bind();
         }
 
         private static void Set(string id, string label)
@@ -130,7 +126,7 @@ namespace ShouldIRestock
             }
         }
 
-        private static string Label(string name, Color color, int count, int stolen, int contraband, bool details)
+        private static string Label(string id, string name, Color color, int count, int stolen, int contraband, bool details)
         {
             string hex = ColorUtility.ToHtmlStringRGB(color);
             string text = "<color=#" + hex + ">[" + name + "]</color> (" + count + ")";
@@ -141,12 +137,12 @@ namespace ShouldIRestock
 
             if (stolen > 0)
             {
-                text += "  " + Text.F("stolen_n", "赃 {0}", stolen);
+                text += "  " + Text.F("stolen_n", "stolen {0}", stolen);
             }
 
             if (contraband > 0)
             {
-                text += "  " + Text.F("contraband_n", "违 {0}", contraband);
+                text += "  " + Text.F("contraband_n", "contraband {0}", contraband);
             }
 
             return text;
@@ -197,6 +193,7 @@ namespace ShouldIRestock
                     continue;
                 }
 
+                BookChrome.Style(paper, binding);
                 if (!binding.data.id.StartsWith("row_"))
                 {
                     continue;
@@ -204,15 +201,18 @@ namespace ShouldIRestock
 
                 if (binding.image != null)
                 {
-                    binding.image.color = new Color(1f, 0.96f, 0.75f, 0.2f);
+                    binding.image.color = Color.clear;
                 }
 
                 if (binding.text != null)
                 {
                     binding.text.richText = true;
                     binding.text.color = new Color(0.2f, 0.14f, 0.05f, 1f);
+                    binding.text.alignment = TextAlignmentOptions.MidlineLeft;
+                    binding.text.margin = new Vector4(8f, 0f, 24f, 0f);
                 }
 
+                SelectionMark.Apply(binding, TagHighlighter.Locked == binding.data.id.Substring(4));
                 RowHover hover = binding.go.GetComponent<RowHover>();
                 if (hover == null)
                 {

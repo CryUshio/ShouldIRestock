@@ -1,0 +1,18 @@
+# de.csv
+loaded,要不要进货 wurde geladen. Im Laden klebt der Zettel unter dem Telefon.
+title,Nachbestellen? Inventory Category Stats
+page_name,Seite {0}
+all_stolen,Alles Diebesgut
+all_contraband,Alle Schmuggelware
+stolen_n,Diebesgut {0}
+contraband_n,Schmuggelware {0}
+tag_other,Nicht zugeordnet
+opt_ignore_locked,Inhalt gesperrter Behälter nicht zählen
+opt_ignore_locked_tip,Gesperrte Kisten und was dahinter liegt zählen nicht und bekommen keinen Umriss.
+opt_skip_debris,Trümmer auslassen
+opt_skip_debris_tip,Haufen, die sich nicht bewegen lassen, zählen nicht zum Bestand.
+opt_thickness,Umrissstärke
+opt_thickness_tip,Pixeldicke des Umrisses um Gegenstände.
+opt_scan,Bestandsintervall (Sekunden)
+opt_scan_tip,So oft werden Mengen und Umrisse neu berechnet.
+opt_types,Diese Typen anzeigen

@@ -1,0 +1,18 @@
+# pl.csv
+loaded,要不要进货 zostało wczytane. W sklepie karteczka przykleja się pod telefonem.
+title,Uzupełnić? Inventory Category Stats
+page_name,Strona {0}
+all_stolen,Wszystkie kradzione przedmioty
+all_contraband,Cała kontrabanda
+stolen_n,kradzione {0}
+contraband_n,kontrabanda {0}
+tag_other,Bez kategorii
+opt_ignore_locked,Pomijać zawartość zamkniętych pojemników
+opt_ignore_locked_tip,Zamknięte skrzynie i to, co za zamknięciem, nie wchodzą do zliczania ani obrysu.
+opt_skip_debris,Pomijać śmieci
+opt_skip_debris_tip,Sterty, których nie da się przesunąć, nie liczą się do zapasu.
+opt_thickness,Grubość obrysu
+opt_thickness_tip,Grubość obrysu przedmiotu w pikselach.
+opt_scan,Odstęp odświeżania zapasu (sekundy)
+opt_scan_tip,Jak często przeliczane są liczby i obrysy.
+opt_types,Pokazuj te typy

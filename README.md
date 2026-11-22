@@ -1,4 +1,4 @@
-# 要不要进货（ShouldIRestock）
+# 要不要进货 Inventory Category Stats
 
 柜台电话下沿的一张便签。点开后按游戏标签做**物品分类统计**：每个品类一行，带颜色和件数，相当于一份品类记录、标签记录。悬停那一行，对应库存会描边；点一下就锁定，再去看别的标签也不会换。行末标出赃物和违禁品数量，顶部还可以单独看全部赃物、全部违禁品。用来看店里还缺哪一类，决定要不要进货。
 
@@ -6,13 +6,13 @@ Inventory Category Stats. A sticky note under the counter phone. It tallies stoc
 
 ## 安装
 
-编译会把文件拷到游戏目录的 `Mods\should_i_restock\`。游戏里打开「模组」，启用「要不要进货」，再重启一次。
+编译产物在项目内的 `ShouldIRestock\bin\Release\should_i_restock\`。游戏里打开「模组」，启用「要不要进货 Inventory Category Stats」，再重启一次。
 
 ```
 dotnet build ShouldIRestock.sln -c Release
 ```
 
-游戏路径写在 `Directory.Build.props` 的 `GameDir`。只编译、不拷进游戏时加上 `-p:DeployToMods=false`。
+本机游戏目录写在不提交的 `Directory.Build.user.props` 里，属性名 `GameDir`。写了才会额外复制进游戏的 `Mods\should_i_restock\`。只留项目内产物时加上 `-p:DeployToMods=false`。
 
 ## 用法
 

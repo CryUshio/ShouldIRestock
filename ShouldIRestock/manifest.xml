@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Manifest>
   <ID>should_i_restock</ID>
-  <Name>要不要进货</Name>
+  <Name>要不要进货 Inventory Category Stats</Name>
   <Author>local</Author>
   <ModVersion>1.0.0</ModVersion>
   <Description>在柜台电话下沿贴一张便签。点开后按游戏标签做物品分类统计：每行一个品类、颜色和件数，并记下赃物与违禁品。悬停高亮对应库存，点击锁定后不再跟着别的标签变。用来看品类记录和标签记录，决定要不要进货。</Description>
   <GameVersions>
-    <Version>1.0.0</Version>
+    <Version>0.46D</Version>
   </GameVersions>
   <Prerequisites />
   <Assemblies>

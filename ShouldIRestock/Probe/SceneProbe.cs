@@ -39,7 +39,6 @@ namespace ShouldIRestock
 
             var chain = new StringBuilder(phone.name);
             Transform node = phone.transform.parent;
-            Canvas canvas = phone.GetComponentInParent<Canvas>();
             int guard = 0;
             while (node != null && guard++ < 8)
             {
@@ -48,18 +47,15 @@ namespace ShouldIRestock
             }
 
             RectTransform rect = phone.GetComponent<RectTransform>();
-            if (rect != null)
-            {
-                Vector3[] corners = new Vector3[4];
-                rect.GetWorldCorners(corners);
-                Log.Msg("探针：电话 " + chain + " 画布=" + (canvas != null ? canvas.name : "无")
-                    + " 锚点=" + rect.anchoredPosition + " 尺寸=" + rect.rect.size
-                    + " 世界左下=" + corners[0] + " 世界右下=" + corners[3]);
-                return;
-            }
-
-            Log.Msg("探针：电话 " + chain + " 没有 RectTransform，世界坐标=" + phone.transform.position
-                + " 画布=" + (canvas != null ? canvas.name : "无"));
+            Bounds bounds;
+            SpriteRenderer sample;
+            bool found = PhoneAnchor.TryGetBounds(phone, out bounds, out sample);
+            Log.Msg("探针：电话 " + chain
+                + " 界面矩形=" + (rect != null)
+                + " 世界坐标=" + phone.transform.position
+                + " 找到范围=" + found
+                + (found ? " 中心=" + bounds.center + " 尺寸=" + bounds.size : "")
+                + PhoneAnchor.Describe(phone));
         }
 
         private static void DumpSample()

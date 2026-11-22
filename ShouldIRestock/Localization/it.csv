@@ -1,0 +1,18 @@
+# it.csv
+loaded,要不要进货 è stato caricato. Nel negozio il foglietto si attacca sotto il telefono.
+title,Rifornire? Inventory Category Stats
+page_name,Pagina {0}
+all_stolen,Tutta la refurtiva
+all_contraband,Tutto il contrabbando
+stolen_n,refurtiva {0}
+contraband_n,contrabbando {0}
+tag_other,Non classificato
+opt_ignore_locked,Non contare il contenuto dei contenitori bloccati
+opt_ignore_locked_tip,Le casse bloccate e ciò che c'è dietro la serratura non entrano nel conteggio né nel contorno.
+opt_skip_debris,Ignora i detriti
+opt_skip_debris_tip,I mucchi che non si possono spostare non contano come scorte.
+opt_thickness,Spessore del contorno
+opt_thickness_tip,Spessore in pixel del contorno degli oggetti.
+opt_scan,Intervallo di aggiornamento delle scorte (secondi)
+opt_scan_tip,Ogni quanto si ricalcolano quantità e contorni.
+opt_types,Mostra questi tipi

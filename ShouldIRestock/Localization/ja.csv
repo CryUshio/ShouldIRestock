@@ -1,0 +1,18 @@
+key,value
+loaded,要不要进货を読み込みました。
+title,仕入れる？ Inventory Category Stats
+page_name,ページ {0}
+all_stolen,すべての盗品
+all_contraband,すべての禁制品
+stolen_n,盗品 {0}
+contraband_n,禁制品 {0}
+tag_other,未分類
+opt_ignore_locked,ロック中の容器の中身を数えない
+opt_ignore_locked_tip,ロック中の箱と、その中の品は集計にも枠線にも入れません。
+opt_skip_debris,ガラクタを除外
+opt_skip_debris_tip,店内のガラクタの山は集計にも枠線にも入れません。
+opt_thickness,枠線の太さ
+opt_thickness_tip,アイテムの枠線の太さ（ピクセル）。
+opt_scan,在庫の更新間隔（秒）
+opt_scan_tip,件数と枠線を再計算する間隔。
+opt_types,次の種類を表示

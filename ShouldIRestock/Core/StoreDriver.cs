@@ -22,6 +22,7 @@ namespace ShouldIRestock
         private void Update()
         {
             StickyNote.Follow();
+            StickyNote.PollClick();
             if (Time.unscaledTime < nextScan)
             {
                 return;
