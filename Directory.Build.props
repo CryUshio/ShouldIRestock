@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <GameDir>G:\SteamLibrary\steamapps\common\Probably Stolen</GameDir>
+    <DeployToMods>true</DeployToMods>
+  </PropertyGroup>
+</Project>
