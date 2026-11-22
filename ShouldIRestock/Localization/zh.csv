@@ -16,3 +16,15 @@ opt_thickness_tip,物品外框的像素粗细。
 opt_scan,库存刷新间隔（秒）
 opt_scan_tip,便签上的件数和描边按这个间隔重算。
 opt_types,是否显示下列类型
+opt_count_excluded,排除项仍计入赃物和违禁品
+opt_count_excluded_tip,勾选时，被排除的货仍计入全部赃物和全部违禁品，悬停这两行时也会描边。
+opt_exclude_types,排除下列细分标签
+exclude_items,排除物品
+exclude_window,分类
+tab_general,基础
+tab_show,显示类型
+tab_exclude_tags,排除标签
+tab_exclude_items,排除物品
+exclude_search,搜索物品
+exclude_empty,没有已排除的物品
+exclude_more,还有更多，请继续输入

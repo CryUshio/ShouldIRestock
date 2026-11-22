@@ -16,3 +16,15 @@ opt_thickness_tip,Grosor en píxeles del contorno de los objetos.
 opt_scan,Intervalo de actualización de existencias (segundos)
 opt_scan_tip,Cada cuánto se recalculan las cantidades y los contornos.
 opt_types,Mostrar estos tipos
+opt_count_excluded,Contar igual los excluidos como robados y contrabando
+opt_count_excluded_tip,Si está marcado lo excluido sigue en Todos los objetos robados y Todo el contrabando y se contornea al pasar por esas filas.
+opt_exclude_types,Excluir estas etiquetas detalladas
+exclude_items,Excluir
+exclude_window,Categorías
+tab_general,General
+tab_show,Tipos visibles
+tab_exclude_tags,Etiquetas excluidas
+tab_exclude_items,Objetos excluidos
+exclude_search,Buscar objetos
+exclude_empty,No hay objetos excluidos
+exclude_more,Sigue escribiendo para acotar la lista

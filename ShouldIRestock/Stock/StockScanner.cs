@@ -75,26 +75,37 @@ namespace ShouldIRestock
                 return;
             }
 
-            if (Settings.SkipDebris != null && Settings.SkipDebris.Value && Legality.IsDebris(item))
+            if (Settings.SkipDebris && Legality.IsDebris(item))
             {
                 return;
             }
 
             if (Legality.IsOwned(item))
             {
-                var piece = new StockPiece
+                List<string> tags = TagCatalog.Match(item);
+                bool excluded = Settings.IsExcluded(item, tags);
+                if (!excluded || Settings.KeepsLegality)
                 {
-                    Item = item,
-                    Element = item as GameItemElement,
-                    Stolen = Legality.IsStolen(item),
-                    Contraband = Legality.IsContraband(item),
-                    Tags = TagCatalog.Match(item)
-                };
-                shot.Pieces.Add(piece);
-                shot.Index[item] = piece;
+                    var piece = new StockPiece
+                    {
+                        Item = item,
+                        Element = item as GameItemElement,
+                        Stolen = Legality.IsStolen(item),
+                        Contraband = Legality.IsContraband(item),
+                        Excluded = excluded,
+                        Tags = tags ?? new List<string>()
+                    };
+                    shot.Pieces.Add(piece);
+                    shot.Index[item] = piece;
+                }
             }
 
-            if (Settings.IgnoreLocked != null && Settings.IgnoreLocked.Value && Legality.IsLockedContainer(item))
+            if (Settings.IgnoreLocked && Legality.IsLockedContainer(item))
+            {
+                return;
+            }
+
+            if (TagCatalog.IsWineInProgress(item))
             {
                 return;
             }
@@ -152,6 +163,11 @@ namespace ShouldIRestock
                 if (piece.Contraband)
                 {
                     shot.Contraband++;
+                }
+
+                if (piece.Excluded)
+                {
+                    continue;
                 }
 
                 if (piece.Tags.Count == 0)

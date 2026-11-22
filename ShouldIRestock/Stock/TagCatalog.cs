@@ -71,9 +71,15 @@ namespace ShouldIRestock
                     return hits;
                 }
 
+                bool fermenting = IsWineInProgress(item);
                 for (int i = 0; i < types.Count; i++)
                 {
                     string type = types[i];
+                    if (fermenting && type == "HOUSEHOLD_GOOD")
+                    {
+                        continue;
+                    }
+
                     if (!string.IsNullOrEmpty(type) && !hits.Contains(type))
                     {
                         hits.Add(type);
@@ -85,6 +91,24 @@ namespace ShouldIRestock
             }
 
             return hits;
+        }
+
+        // 开始酿造后游戏会拿掉日用品，但读档时工厂又会把它加回类型列表。
+        public static bool IsWineInProgress(GameItem item)
+        {
+            try
+            {
+                if (item == null || !item.IsTag("WINE_CONTAINER_TAG"))
+                {
+                    return false;
+                }
+
+                return item.GetTagReadonly("WINE_CONTAINER_STATE").GetInt() != 0;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public static bool Has(GameItem item, string tag)

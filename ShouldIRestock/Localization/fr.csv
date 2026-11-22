@@ -16,3 +16,15 @@ opt_thickness_tip,Épaisseur en pixels du contour des objets.
 opt_scan,Intervalle de mise à jour du stock (secondes)
 opt_scan_tip,Fréquence de recalcul des quantités et des contours.
 opt_types,Afficher ces types
+opt_count_excluded,Compter quand même les exclus comme volés et contrebande
+opt_count_excluded_tip,Si coché les objets exclus comptent encore dans Tous les objets volés et Toute la contrebande et sont entourés au survol de ces lignes.
+opt_exclude_types,Exclure ces étiquettes détaillées
+exclude_items,Exclure
+exclude_window,Catégories
+tab_general,Général
+tab_show,Types affichés
+tab_exclude_tags,Étiquettes exclues
+tab_exclude_items,Objets exclus
+exclude_search,Chercher un objet
+exclude_empty,Aucun objet exclu
+exclude_more,Continuez à saisir pour réduire la liste

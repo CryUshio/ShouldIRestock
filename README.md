@@ -2,7 +2,7 @@
 
 柜台电话下沿的一张便签。点开后按游戏标签做**物品分类统计**：每个品类一行，带颜色和件数，相当于一份品类记录、标签记录。悬停那一行，对应库存会描边；点一下就锁定，再去看别的标签也不会换。行末标出赃物和违禁品数量，顶部还可以单独看全部赃物、全部违禁品。用来看店里还缺哪一类，决定要不要进货。
 
-Inventory Category Stats. A sticky note under the counter phone. It tallies stock by the game's item tags. Hover a row to outline that category; click to lock the highlight. Stolen goods get an amber corner, contraband a red one.
+Inventory Category Stats. A sticky note under the counter phone. It tallies stock by the game's item tags. Hover a row to outline that category; click to lock the highlight. Stolen goods get an amber corner, contraband a red one. The wrench on the note opens the settings: what to show, which detail tags and items to leave out, outline thickness, and how often the tally refreshes.
 
 ## 安装
 
@@ -21,7 +21,7 @@ dotnet build ShouldIRestock.sln -c Release
 3. 鼠标停在一行上，店里这个标签的货（背包、前后柜台、暗格、展示柜、仓库）会按品类颜色描边。赃物右上角是琥珀点，违禁品是红点。
 4. 点一行锁定。锁定之后，悬停别的行不再改高亮。再点同一行解除。
 5. 品类多了用纸下方的翻页。关掉纸或睡觉会取消悬停，锁定还在。
-6. 模组齿轮里可以改描边粗细、刷新间隔，以及要不要跳过上锁容器和杂物堆。
+6. 便签右上角的扳手打开设置，改完立刻生效。基础里可以改描边粗细、刷新间隔，以及要不要跳过上锁容器和杂物堆。显示类型决定哪些行出现。排除标签、排除物品会把整件货从品类计数和描边里拿掉；默认仍计入全部赃物和全部违禁品。
 
 统计的是你自己的货。顾客放在柜台上、还没买下来的东西不算。
 

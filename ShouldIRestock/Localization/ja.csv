@@ -16,3 +16,15 @@ opt_thickness_tip,アイテムの枠線の太さ（ピクセル）。
 opt_scan,在庫の更新間隔（秒）
 opt_scan_tip,件数と枠線を再計算する間隔。
 opt_types,次の種類を表示
+opt_count_excluded,除外した品も盗品と禁制品に数える
+opt_count_excluded_tip,オンのとき除外した品は「すべての盗品」と「すべての禁制品」に入り、その行を指すと枠線も付きます。
+opt_exclude_types,次の細かいタグを除外
+exclude_items,物品を除外
+exclude_window,分類
+tab_general,基本
+tab_show,表示する種類
+tab_exclude_tags,除外するタグ
+tab_exclude_items,除外する物品
+exclude_search,物品を検索
+exclude_empty,除外した物品はありません
+exclude_more,さらに入力して絞り込んでください

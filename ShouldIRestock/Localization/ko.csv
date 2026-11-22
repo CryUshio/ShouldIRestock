@@ -16,3 +16,15 @@ opt_thickness_tip,아이템 외곽선의 픽셀 굵기.
 opt_scan,재고 갱신 간격(초)
 opt_scan_tip,수량과 외곽선을 다시 계산하는 간격.
 opt_types,다음 종류 표시
+opt_count_excluded,제외한 물건도 장물과 밀수품에 포함
+opt_count_excluded_tip,켜면 제외한 물건이 모든 장물과 모든 밀수품에 포함되고 그 줄에 마우스를 올리면 외곽선도 그려집니다.
+opt_exclude_types,다음 세부 태그 제외
+exclude_items,물품 제외
+exclude_window,분류
+tab_general,기본
+tab_show,표시 종류
+tab_exclude_tags,제외 태그
+tab_exclude_items,제외 물품
+exclude_search,물품 검색
+exclude_empty,제외한 물품이 없습니다
+exclude_more,더 입력해서 목록을 좁히세요

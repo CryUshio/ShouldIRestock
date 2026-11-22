@@ -16,3 +16,15 @@ opt_thickness_tip,Pixeldicke des Umrisses um Gegenstände.
 opt_scan,Bestandsintervall (Sekunden)
 opt_scan_tip,So oft werden Mengen und Umrisse neu berechnet.
 opt_types,Diese Typen anzeigen
+opt_count_excluded,Ausgeschlossene weiter als Diebesgut und Schmuggelware zählen
+opt_count_excluded_tip,Wenn an zählen ausgeschlossene Gegenstände weiter bei Alles Diebesgut und Alle Schmuggelware und bekommen dort einen Umriss.
+opt_exclude_types,Diese Detailtypen ausschließen
+exclude_items,Ausschluss
+exclude_window,Kategorien
+tab_general,Allgemein
+tab_show,Typen anzeigen
+tab_exclude_tags,Tags ausschließen
+tab_exclude_items,Gegenstände
+exclude_search,Gegenstände suchen
+exclude_empty,Keine ausgeschlossenen Gegenstände
+exclude_more,Weiter tippen zum Eingrenzen

@@ -97,7 +97,13 @@ namespace ShouldIRestock
                 binding.image.color = Color.white;
             }
 
-            if (binding.button != null && (action == "close" || action == "zoom"
+            if (action == "exclude" && binding.image != null)
+            {
+                binding.image.color = Color.white;
+                binding.image.preserveAspect = true;
+            }
+
+            if (binding.button != null && (action == "close" || action == "zoom" || action == "exclude"
                 || action == "flip_left" || action == "flip_right"))
             {
                 ColorBlock colors = binding.button.colors;

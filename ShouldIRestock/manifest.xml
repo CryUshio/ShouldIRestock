@@ -3,24 +3,24 @@
   <ID>should_i_restock</ID>
   <Name>要不要进货 Inventory Category Stats</Name>
   <Author>Oniisama</Author>
-  <ModVersion>1.0.0</ModVersion>
+  <ModVersion>1.1.0</ModVersion>
   <Description>在柜台电话下沿贴一张便签。点开后按游戏标签做物品分类统计：每行一个品类、颜色和件数，并记下赃物与违禁品。悬停高亮对应库存，点击锁定后不再跟着别的标签变。用来看品类记录和标签记录，决定要不要进货。
 
-设置：
-跳过上锁容器里的货：锁着的箱子和锁后的物品不计入分类，也不描边。默认开启。
-跳过杂物堆：不把没法搬走的杂物算进库存。默认开启。
-描边粗细：物品外框的像素粗细，1 到 6，默认最细一档。
-库存刷新间隔（秒）：便签上的件数和描边按这个间隔重算，0.2 到 2 秒。
-是否显示下列类型：赃物、违禁品和基础类型默认显示；细分类型和未归类默认不显示。
+便签右上角的扳手打开游戏内设置，改完立刻生效。
+基础：跳过上锁容器里的货、跳过杂物堆、排除项仍计入赃物和违禁品，这三项默认开启。描边粗细 1 到 6，默认最细。库存刷新间隔 0.2 到 2 秒，默认 0.4 秒。
+显示类型：赃物、违禁品和基础类型默认显示；细分类型和未归类默认不显示。
+排除标签：勾选的细分标签整件不计入品类，也不描边。
+排除物品：可搜索并勾选，默认都不排除。排除酒瓶时，空瓶、酿造中和酿完的酒一起排除。酿造中和酿完的酒瓶不再算入日用品。
+被排除的货默认仍计入全部赃物和全部违禁品，悬停这两行时也会描边。
 
 A sticky note sits under the counter phone. Open it for a tally by the game's own tags: each row shows a category, its color, and a count, and stolen goods and contraband are noted too. Hover a row to outline that stock; click to lock the highlight so it stays put when you look at another tag. Use it to read the category and tag records and decide whether to restock.
 
-Settings:
-Skip goods inside locked containers: locked boxes and the items behind a lock are left out of the tally and the outline. On by default.
-Skip debris: piles you cannot move are not counted as stock. On by default.
-Outline thickness: pixel thickness of the item outline, from 1 to 6. Defaults to the thinnest.
-Stock refresh interval (seconds): how often the counts and outlines are recalculated, from 0.2 to 2.
-Show these types: stolen goods, contraband, and the main types are shown by default. Detail types and Uncategorized stay off.</Description>
+The wrench at the top right of the note opens the in-game settings. Changes apply immediately.
+General: skip goods inside locked containers, skip debris, and still count excluded goods as stolen and contraband. Those three are on by default. Outline thickness runs from 1 to 6 and starts at the thinnest. The stock refresh interval runs from 0.2 to 2 seconds and starts at 0.4.
+Show types: stolen goods, contraband, and the main types are shown by default. Detail types and Uncategorized stay off.
+Exclude tags: a checked detail tag drops the whole item from category rows and outlines.
+Exclude items: search and check items. Nothing is excluded by default. Excluding the wine bottle also excludes it while empty, fermenting, and finished. Fermenting and finished bottles are not counted as household goods.
+Excluded goods still count toward All stolen and All contraband by default, and they outline when those rows are hovered.</Description>
   <GameVersions>
     <Version>0.46D</Version>
   </GameVersions>

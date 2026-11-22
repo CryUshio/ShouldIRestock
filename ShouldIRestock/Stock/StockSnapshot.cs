@@ -8,6 +8,7 @@ namespace ShouldIRestock
         public GameItemElement Element;
         public bool Stolen;
         public bool Contraband;
+        public bool Excluded;
         public List<string> Tags;
 
         // 容器里面（含多层嵌套）的货，用来让外层容器也跟着高亮。
@@ -17,6 +18,7 @@ namespace ShouldIRestock
         {
             if (tag == ModIds.Stolen) return Stolen;
             if (tag == ModIds.Contraband) return Contraband;
+            if (Excluded) return false;
             if (tag == ModIds.Other) return Tags.Count == 0;
             return Tags.Contains(tag);
         }

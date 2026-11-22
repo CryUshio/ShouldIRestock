@@ -74,7 +74,8 @@ namespace ShouldIRestock
             for (int page = 0; page < pages; page++)
             {
                 paper.AddPage(Text.F("page_name", "Page {0}", page + 1));
-                paper.AddText(12f, TitleY, 224f, 20f, Text.L("title", "要不要进货 Inventory Category Stats"), "handwritten", "title_" + page, "left", TitleSize);
+                paper.AddText(12f, TitleY, 168f, 20f, Text.L("title", "要不要进货 Inventory Category Stats"), "handwritten", "title_" + page, "left", TitleSize);
+                paper.AddIconButton(187f, 8f, 14f, 15f, "paper_buttons_wrench", ItemExcludeWindow.Open, "exclude_" + page, "exclude");
                 int start = page * RowsPerPage;
                 for (int slot = 0; slot < RowsPerPage; slot++)
                 {

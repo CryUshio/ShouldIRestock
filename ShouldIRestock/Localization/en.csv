@@ -16,3 +16,15 @@ opt_thickness_tip,Pixel thickness of the item outline.
 opt_scan,Stock refresh interval (seconds)
 opt_scan_tip,How often the counts and outlines are recalculated.
 opt_types,Show these types
+opt_count_excluded,Still count excluded goods as stolen and contraband
+opt_count_excluded_tip,When on, excluded goods still count toward All stolen and All contraband, and they outline when those rows are hovered.
+opt_exclude_types,Exclude these detail tags
+exclude_items,Exclude items
+exclude_window,Categories
+tab_general,General
+tab_show,Show types
+tab_exclude_tags,Exclude tags
+tab_exclude_items,Exclude items
+exclude_search,Search items
+exclude_empty,No excluded items
+exclude_more,Keep typing to narrow the list
