@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 
 namespace ShouldIRestock
@@ -152,18 +152,21 @@ namespace ShouldIRestock
         {
             var counts = new Dictionary<string, TagRow>();
             var other = new TagRow { Id = ModIds.Other, Name = Text.L("tag_other", "Uncategorized") };
+            var stolenRow = new TagRow { Id = ModIds.Stolen, Name = Text.L("all_stolen", "All stolen") };
+            var contrabandRow = new TagRow { Id = ModIds.Contraband, Name = Text.L("all_contraband", "All contraband") };
             for (int i = 0; i < shot.Pieces.Count; i++)
             {
                 StockPiece piece = shot.Pieces[i];
                 int units = Units(piece.Item);
+                long worth = ItemWorth.Of(piece.Item);
                 if (piece.Stolen)
                 {
-                    shot.Stolen += units;
+                    Add(stolenRow, piece, units, worth);
                 }
 
                 if (piece.Contraband)
                 {
-                    shot.Contraband += units;
+                    Add(contrabandRow, piece, units, worth);
                 }
 
                 if (piece.Excluded)
@@ -173,10 +176,7 @@ namespace ShouldIRestock
 
                 if (piece.Tags.Count == 0)
                 {
-                    shot.Other += units;
-                    other.Count += units;
-                    if (piece.Stolen) other.Stolen += units;
-                    if (piece.Contraband) other.Contraband += units;
+                    Add(other, piece, units, worth);
                     continue;
                 }
 
@@ -194,11 +194,13 @@ namespace ShouldIRestock
                         counts[row.Id] = row;
                     }
 
-                    row.Count += units;
-                    if (piece.Stolen) row.Stolen += units;
-                    if (piece.Contraband) row.Contraband += units;
+                    Add(row, piece, units, worth);
                 }
             }
+
+            shot.Stolen = stolenRow.Count;
+            shot.Contraband = contrabandRow.Count;
+            shot.Other = other.Count;
 
             // 勾选即占一行，没有库存也显示 0，这样开关会立刻反映到便签上。
             List<string> shown = ShownTypes.IdsInOrder();
@@ -216,12 +218,12 @@ namespace ShouldIRestock
             var rows = new List<TagRow>();
             if (Settings.Shows(ModIds.Stolen))
             {
-                rows.Add(new TagRow { Id = ModIds.Stolen, Name = Text.L("all_stolen", "All stolen"), Count = shot.Stolen });
+                rows.Add(stolenRow);
             }
 
             if (Settings.Shows(ModIds.Contraband))
             {
-                rows.Add(new TagRow { Id = ModIds.Contraband, Name = Text.L("all_contraband", "All contraband"), Count = shot.Contraband });
+                rows.Add(contrabandRow);
             }
 
             var types = new List<TagRow>(counts.Values);
@@ -246,6 +248,27 @@ namespace ShouldIRestock
             }
 
             shot.Signature = signature.ToString();
+        }
+
+        // 普通、赃物、违禁品分开计。又脏又违禁的货两边都算，不合成一个总数。
+        private static void Add(TagRow row, StockPiece piece, int units, long worth)
+        {
+            row.Count += units;
+            row.Value += worth;
+            if (piece.Stolen)
+            {
+                row.Stolen += units;
+            }
+
+            if (piece.Contraband)
+            {
+                row.Contraband += units;
+            }
+
+            if (!piece.Stolen && !piece.Contraband)
+            {
+                row.Normal += units;
+            }
         }
 
         private static int Units(GameItem item)

@@ -9,13 +9,9 @@ namespace ShouldIRestock
 
         public static void SetHover(string tagId)
         {
-            if (Locked != null)
-            {
-                return;
-            }
-
             Hover = tagId;
             StoreDriver.Wake();
+            PaperBoard.RefreshMarks();
         }
 
         public static void ClearHover(string tagId)
@@ -24,6 +20,7 @@ namespace ShouldIRestock
             {
                 Hover = null;
                 StoreDriver.Wake();
+                PaperBoard.RefreshMarks();
             }
         }
 
@@ -36,6 +33,16 @@ namespace ShouldIRestock
 
             Hover = null;
             StoreDriver.Wake();
+            PaperBoard.RefreshMarks();
+        }
+
+        // 便签关掉后，悬停和锁定一起取消，框线马上拆掉。
+        public static void Release()
+        {
+            Hover = null;
+            Locked = null;
+            OutlinePainter.Clear();
+            TabPlatePainter.Clear();
         }
 
         public static void ToggleLock(string tagId)
@@ -47,6 +54,7 @@ namespace ShouldIRestock
             }
 
             StoreDriver.Wake();
+            PaperBoard.RefreshMarks();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,6 +45,21 @@ namespace ShouldIRestock
             float inheritedMirror = Rect.parent != null && Rect.parent.localScale.x < 0f ? -1f : 1f;
             float mirror = (flipped ? -1f : 1f) * inheritedMirror;
             Root.transform.localScale = new Vector3(mirror, 1f, 1f);
+        }
+
+        public void ApplyRect(Color color, float width, float height)
+        {
+            if (Outline == null || width < 1f || height < 1f)
+            {
+                return;
+            }
+
+            Root.SetActive(true);
+            Visible = true;
+            Outline.color = color;
+            Outline.Configure(null, 1, 1, width, height, Settings.LineThickness);
+            Root.transform.localScale = Vector3.one;
+            Root.transform.SetAsLastSibling();
         }
 
         public void Hide()

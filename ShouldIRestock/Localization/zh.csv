@@ -15,6 +15,10 @@ opt_thickness,描边粗细
 opt_thickness_tip,物品外框的像素粗细。
 opt_scan,库存刷新间隔（秒）
 opt_scan_tip,便签上的件数和描边按这个间隔重算。
+opt_note_side,便签纸摆放方位
+opt_note_side_tip,左边贴在电话下沿，右边贴在平板电脑右下方。
+opt_note_left,左边
+opt_note_right,右边
 opt_types,是否显示下列类型
 opt_count_excluded,排除项仍计入赃物和违禁品
 opt_count_excluded_tip,勾选时，被排除的货仍计入全部赃物和全部违禁品，悬停这两行时也会描边。

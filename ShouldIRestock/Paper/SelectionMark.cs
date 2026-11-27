@@ -14,10 +14,22 @@ namespace ShouldIRestock
         {
             Transform found = binding.go.transform.Find(Node);
             GameObject mark = found != null ? found.gameObject : Create(binding);
-            if (mark != null)
+            if (mark == null)
             {
-                mark.SetActive(selected);
+                return;
             }
+
+            RectTransform rect = mark.GetComponent<RectTransform>();
+            if (rect != null)
+            {
+                rect.anchorMin = new Vector2(0f, 0.5f);
+                rect.anchorMax = new Vector2(0f, 0.5f);
+                rect.pivot = new Vector2(0f, 0.5f);
+                rect.anchoredPosition = new Vector2(-5f, 0f);
+                rect.sizeDelta = new Vector2(14f, 14f);
+            }
+
+            mark.SetActive(selected);
         }
 
         private static GameObject Create(PaperUI.Binding binding)
@@ -26,10 +38,10 @@ namespace ShouldIRestock
             var go = new GameObject(Node);
             go.transform.SetParent(binding.go.transform, false);
             var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(1f, 0.5f);
-            rect.anchorMax = new Vector2(1f, 0.5f);
-            rect.pivot = new Vector2(1f, 0.5f);
-            rect.anchoredPosition = new Vector2(-7f, 0f);
+            rect.anchorMin = new Vector2(0f, 0.5f);
+            rect.anchorMax = new Vector2(0f, 0.5f);
+            rect.pivot = new Vector2(0f, 0.5f);
+            rect.anchoredPosition = new Vector2(-5f, 0f);
             rect.sizeDelta = new Vector2(14f, 14f);
 
             if (checkSprite != null)

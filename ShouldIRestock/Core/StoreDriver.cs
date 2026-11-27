@@ -34,6 +34,7 @@ namespace ShouldIRestock
             StockSnapshot shot = StockScanner.Scan();
             PaperBoard.Sync(shot);
             OutlinePainter.Repaint(shot);
+            TabPlatePainter.Repaint(shot);
         }
 
         public static void Wake()

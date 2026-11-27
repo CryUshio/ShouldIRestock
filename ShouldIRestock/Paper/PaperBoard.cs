@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -14,6 +14,7 @@ namespace ShouldIRestock
         private const float RowHeight = 18f;
         private static PaperUI paper;
         private static string signature = "";
+        private static readonly Dictionary<string, string> values = new Dictionary<string, string>();
 
         public static void Sync(StockSnapshot shot)
         {
@@ -49,13 +50,23 @@ namespace ShouldIRestock
 
         public static void Close()
         {
+            TagHighlighter.Release();
+            Tear();
+        }
+
+        private static void Tear()
+        {
             PaperPlace.Capture(paper);
             TagHighlighter.ClearHover();
+            PaperUI ui = paper;
+            paper = null;
+            signature = "";
+            values.Clear();
             try
             {
-                if (paper != null && paper.IsAlive)
+                if (ui != null && ui.IsAlive)
                 {
-                    paper.Close();
+                    ui.Close();
                 }
                 else
                 {
@@ -65,14 +76,11 @@ namespace ShouldIRestock
             catch
             {
             }
-
-            paper = null;
-            signature = "";
         }
 
         private static void Open(StockSnapshot shot)
         {
-            Close();
+            Tear();
             signature = shot.Signature;
             int pages = Mathf.Max(1, Mathf.CeilToInt(shot.Rows.Count / (float)RowsPerPage));
             paper = ModHelper.CreatePaper(ModIds.Id, ModIds.BookId, "sticky_sheet");
@@ -92,8 +100,7 @@ namespace ShouldIRestock
                     }
 
                     TagRow row = shot.Rows[rowIndex];
-                    bool special = row.Id == ModIds.Stolen || row.Id == ModIds.Contraband;
-                    AddRow(row.Id, RowTop + slot * RowStep, Label(row.Id, row.Name, TagCatalog.ColorOf(row.Id), row.Count, row.Stolen, row.Contraband, !special));
+                    AddRow(row.Id, RowTop + slot * RowStep, Label(row));
                 }
             }
 
@@ -103,6 +110,7 @@ namespace ShouldIRestock
             BookChrome.RememberZoom(paper);
             PaperPlace.Arm();
             Bind();
+            WriteValues(shot);
             BookChrome.ClearSelection();
         }
 
@@ -117,11 +125,11 @@ namespace ShouldIRestock
             for (int i = 0; i < shot.Rows.Count; i++)
             {
                 TagRow row = shot.Rows[i];
-                bool special = row.Id == ModIds.Stolen || row.Id == ModIds.Contraband;
-                Set("row_" + row.Id, Label(row.Id, row.Name, TagCatalog.ColorOf(row.Id), row.Count, row.Stolen, row.Contraband, !special));
+                Set("row_" + row.Id, Label(row));
             }
 
             Bind();
+            WriteValues(shot);
         }
 
         private static void Set(string id, string label)
@@ -164,35 +172,96 @@ namespace ShouldIRestock
                 }
 
                 binding.text.text = label;
+                MoneyFormat.Apply(binding.text);
                 binding.text.ForceMeshUpdate();
             }
         }
 
-        private static string Label(string id, string name, Color color, int count, int stolen, int contraband, bool details)
+        private static string Label(TagRow row)
         {
-            string hex = ColorUtility.ToHtmlStringRGB(color);
-            string text = "<color=#" + hex + ">[" + name + "]</color> (" + count + ")";
-            if (!details)
+            string name = ColorUtility.ToHtmlStringRGB(TagCatalog.ColorOf(row.Id));
+            string title = "<color=#" + name + ">[" + row.Name + "]</color>";
+            if (row.Id == ModIds.Stolen)
             {
-                return text;
+                return title + Count(row.Count, TagCatalog.OutlineColor(HighlightStyle.Stolen));
             }
 
-            if (stolen > 0)
+            if (row.Id == ModIds.Contraband)
             {
-                text += "  " + Text.F("stolen_n", "stolen {0}", stolen);
+                return title + Count(row.Count, TagCatalog.OutlineColor(HighlightStyle.Contraband));
             }
 
-            if (contraband > 0)
+            string stolen = ColorUtility.ToHtmlStringRGB(TagCatalog.OutlineColor(HighlightStyle.Stolen));
+            string contraband = ColorUtility.ToHtmlStringRGB(TagCatalog.OutlineColor(HighlightStyle.Contraband));
+            return title + "(" + row.Normal
+                + "/<color=#" + stolen + ">" + row.Stolen + "</color>"
+                + "/<color=#" + contraband + ">" + row.Contraband + "</color>)";
+        }
+
+        private static string Count(int count, Color color)
+        {
+            return "(<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + count + "</color>)";
+        }
+
+        private static void WriteValues(StockSnapshot shot)
+        {
+            values.Clear();
+            if (shot != null)
             {
-                text += "  " + Text.F("contraband_n", "contraband {0}", contraband);
+                for (int i = 0; i < shot.Rows.Count; i++)
+                {
+                    TagRow row = shot.Rows[i];
+                    values[row.Id] = MoneyFormat.Text(row.Value);
+                }
             }
 
-            return text;
+            PaintValues();
+        }
+
+        private static void PaintValues()
+        {
+            if (paper == null)
+            {
+                return;
+            }
+
+            List<PaperUI.Binding> bindings = null;
+            try
+            {
+                bindings = paper.VisibleBindings();
+            }
+            catch
+            {
+                return;
+            }
+
+            if (bindings == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < bindings.Count; i++)
+            {
+                PaperUI.Binding binding = bindings[i];
+                if (binding == null || binding.data == null || string.IsNullOrEmpty(binding.data.id) || !binding.data.id.StartsWith("row_"))
+                {
+                    continue;
+                }
+
+                string money;
+                if (!values.TryGetValue(binding.data.id.Substring(4), out money))
+                {
+                    continue;
+                }
+
+                RowMoney.Apply(binding, money);
+            }
         }
 
         private static void OnPageShown(PaperUI ui, int page)
         {
             Bind();
+            PaintValues();
         }
 
         private static void OnClosed(PaperUI ui)
@@ -207,9 +276,49 @@ namespace ShouldIRestock
                 return;
             }
 
-            TagHighlighter.ClearHover();
+            TagHighlighter.Release();
             paper = null;
             signature = "";
+            values.Clear();
+        }
+
+        public static void RefreshMarks()
+        {
+            if (paper == null)
+            {
+                return;
+            }
+
+            List<PaperUI.Binding> bindings = null;
+            try
+            {
+                bindings = paper.VisibleBindings();
+            }
+            catch
+            {
+                return;
+            }
+
+            if (bindings == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < bindings.Count; i++)
+            {
+                PaperUI.Binding binding = bindings[i];
+                if (binding == null || binding.go == null || binding.data == null || string.IsNullOrEmpty(binding.data.id) || !binding.data.id.StartsWith("row_"))
+                {
+                    continue;
+                }
+
+                SelectionMark.Apply(binding, Marked(binding.data.id.Substring(4)));
+            }
+        }
+
+        private static bool Marked(string tagId)
+        {
+            return tagId == TagHighlighter.Locked || tagId == TagHighlighter.Hover;
         }
 
         private static void Bind()
@@ -258,10 +367,11 @@ namespace ShouldIRestock
                     binding.text.richText = true;
                     binding.text.color = new Color(0.2f, 0.14f, 0.05f, 1f);
                     binding.text.alignment = TextAlignmentOptions.MidlineLeft;
-                    binding.text.margin = new Vector4(8f, 0f, 24f, 0f);
+                    binding.text.margin = new Vector4(8f, 0f, 76f, 0f);
+                    MoneyFormat.Apply(binding.text);
                 }
 
-                SelectionMark.Apply(binding, TagHighlighter.Locked == binding.data.id.Substring(4));
+                SelectionMark.Apply(binding, Marked(binding.data.id.Substring(4)));
                 RowHover hover = binding.go.GetComponent<RowHover>();
                 if (hover == null)
                 {

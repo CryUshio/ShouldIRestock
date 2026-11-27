@@ -6,6 +6,8 @@ namespace ShouldIRestock
     public static class ItemExclude
     {
         private const string FileName = "excluded-items.txt";
+        private const string SeedFile = "excluded-seed.txt";
+        private static readonly string[] Defaults = { "water_tablet" };
         private static readonly HashSet<string> Selected = new HashSet<string>();
         private static readonly List<Named> Catalog = new List<Named>();
         private static bool loaded;
@@ -105,9 +107,70 @@ namespace ShouldIRestock
                 text = null;
             }
 
+            if (!string.IsNullOrEmpty(text))
+            {
+                string[] lines = text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    string id = lines[i].Trim();
+                    if (id.Length > 0)
+                    {
+                        Selected.Add(id);
+                    }
+                }
+            }
+
+            ApplyNewDefaults();
+        }
+
+        // 新的默认排除只补一次。玩家之后取消勾选不会在下次启动时被加回来。
+        private static void ApplyNewDefaults()
+        {
+            var seeded = ReadIds(SeedFile);
+            bool selectionChanged = false;
+            bool seedChanged = false;
+            for (int i = 0; i < Defaults.Length; i++)
+            {
+                string id = Defaults[i];
+                if (!seeded.Add(id))
+                {
+                    continue;
+                }
+
+                seedChanged = true;
+                if (Selected.Add(id))
+                {
+                    selectionChanged = true;
+                }
+            }
+
+            if (selectionChanged)
+            {
+                Save();
+            }
+
+            if (seedChanged)
+            {
+                WriteIds(SeedFile, seeded);
+            }
+        }
+
+        private static HashSet<string> ReadIds(string file)
+        {
+            var ids = new HashSet<string>();
+            string text = null;
+            try
+            {
+                text = ModHelper.ReadModDataFileText(ModIds.Id, file);
+            }
+            catch
+            {
+                text = null;
+            }
+
             if (string.IsNullOrEmpty(text))
             {
-                return;
+                return ids;
             }
 
             string[] lines = text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -116,8 +179,23 @@ namespace ShouldIRestock
                 string id = lines[i].Trim();
                 if (id.Length > 0)
                 {
-                    Selected.Add(id);
+                    ids.Add(id);
                 }
+            }
+
+            return ids;
+        }
+
+        private static void WriteIds(string file, HashSet<string> ids)
+        {
+            var list = new List<string>(ids);
+            list.Sort(StringComparer.Ordinal);
+            try
+            {
+                ModHelper.WriteModDataFileText(ModIds.Id, file, string.Join("\n", list));
+            }
+            catch
+            {
             }
         }
 

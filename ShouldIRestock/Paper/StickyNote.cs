@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace ShouldIRestock
 {
@@ -41,7 +41,11 @@ namespace ShouldIRestock
             float width = Mathf.Max(0.2f, bounds.size.x * 0.34f);
             float spriteWidth = renderer.sprite != null ? renderer.sprite.bounds.size.x : 1f;
             float scale = spriteWidth > 0.001f ? width / spriteWidth : 1f;
-            note.position = new Vector3(bounds.center.x - width * 0.15f, bounds.min.y - width * 0.12f, bounds.center.z);
+            Vector3 underPhone = new Vector3(bounds.center.x - width * 0.15f, bounds.min.y - width * 0.24f, bounds.center.z);
+            Vector3 besideTablet;
+            note.position = GeneralOptions.NoteOnRight && RecorderSpot.TryGet(width, underPhone, out besideTablet)
+                ? besideTablet
+                : underPhone;
             note.localScale = new Vector3(scale, scale, 1f);
             if (sample != null)
             {

@@ -15,6 +15,7 @@ namespace ShouldIRestock
         private static bool countExcludedLegality = true;
         private static int thickness = 1;
         private static float scanSeconds = 0.4f;
+        private static bool noteOnRight;
 
         public static bool IgnoreLocked
         {
@@ -58,6 +59,15 @@ namespace ShouldIRestock
             {
                 Load();
                 return scanSeconds;
+            }
+        }
+
+        public static bool NoteOnRight
+        {
+            get
+            {
+                Load();
+                return noteOnRight;
             }
         }
 
@@ -120,6 +130,18 @@ namespace ShouldIRestock
             }
 
             scanSeconds = value;
+            Commit();
+        }
+
+        public static void SetNoteOnRight(bool value)
+        {
+            Load();
+            if (noteOnRight == value)
+            {
+                return;
+            }
+
+            noteOnRight = value;
             Commit();
         }
 
@@ -201,6 +223,9 @@ namespace ShouldIRestock
                         scanSeconds = Mathf.Clamp(seconds, 0.2f, 2f);
                     }
                     break;
+                case "note_side":
+                    noteOnRight = value == "right";
+                    break;
             }
         }
 
@@ -224,7 +249,7 @@ namespace ShouldIRestock
 
             MatchCollection matches = Regex.Matches(
                 json,
-                "\"key\"\\s*:\\s*\"(ignore_locked|skip_debris|count_excluded_legality|thickness|scan_seconds)\"\\s*,\\s*\"value\"\\s*:\\s*\"([^\"]*)\"",
+                "\"key\"\\s*:\\s*\"(ignore_locked|skip_debris|count_excluded_legality|thickness|scan_seconds|note_side)\"\\s*,\\s*\"value\"\\s*:\\s*\"([^\"]*)\"",
                 RegexOptions.IgnoreCase);
             for (int i = 0; i < matches.Count; i++)
             {
@@ -240,7 +265,8 @@ namespace ShouldIRestock
                 "skip_debris=" + (skipDebris ? "true" : "false"),
                 "count_excluded_legality=" + (countExcludedLegality ? "true" : "false"),
                 "thickness=" + thickness.ToString(CultureInfo.InvariantCulture),
-                "scan_seconds=" + scanSeconds.ToString("0.###", CultureInfo.InvariantCulture)
+                "scan_seconds=" + scanSeconds.ToString("0.###", CultureInfo.InvariantCulture),
+                "note_side=" + (noteOnRight ? "right" : "left")
             };
             try
             {

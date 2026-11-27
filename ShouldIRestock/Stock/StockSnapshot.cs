@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ShouldIRestock
 {
@@ -34,7 +34,7 @@ namespace ShouldIRestock
             HighlightStyle best = StyleOf(tag);
             for (int i = 0; i < Inner.Count && best != HighlightStyle.Contraband; i++)
             {
-                HighlightStyle inner = Inner[i].StyleOf(tag);
+                HighlightStyle inner = Inner[i].Style(tag);
                 if (inner > best) best = inner;
             }
 
@@ -61,8 +61,10 @@ namespace ShouldIRestock
         public string Id;
         public string Name;
         public int Count;
+        public int Normal;
         public int Stolen;
         public int Contraband;
+        public long Value;
     }
 
     public sealed class StockSnapshot

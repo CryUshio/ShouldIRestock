@@ -23,8 +23,7 @@ namespace ShouldIRestock
             ModHook.OnReturningStoreLate -= OnStoreReady;
             ModHook.OnLeavingStoreEarly -= OnLeaveStore;
             ModHook.OnGoingSleepEarly -= OnSleep;
-            TagHighlighter.ClearHover();
-            OutlinePainter.Clear();
+            TagHighlighter.Release();
             StickyNote.Destroy();
             PaperBoard.Close();
         }
@@ -40,12 +39,12 @@ namespace ShouldIRestock
         {
             TagHighlighter.ClearHover();
             OutlinePainter.Clear();
+            TabPlatePainter.Clear();
             StickyNote.Destroy();
         }
 
         private static void OnSleep()
         {
-            TagHighlighter.ClearHover();
             PaperBoard.Close();
         }
     }

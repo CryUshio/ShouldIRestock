@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ShouldIRestock
@@ -7,18 +7,18 @@ namespace ShouldIRestock
     {
         private const int Unknown = 1000;
 
-        // 物品描边颜色，沿用 hollow.clientdemandhighlight：普通绿、赃物琥珀、违禁品红。
+        // 物品描边颜色：普通青色（cyan），赃物标准橙（#FFA500），违禁品红。
         public static Color OutlineColor(HighlightStyle style)
         {
             switch (style)
             {
                 case HighlightStyle.Contraband: return new Color(0.95f, 0.22f, 0.2f, 0.95f);
-                case HighlightStyle.Stolen: return new Color(1f, 0.7f, 0.1f, 0.95f);
-                default: return new Color(0.3f, 0.9f, 0.35f, 0.95f);
+                case HighlightStyle.Stolen: return new Color(1f, 0.64705884f, 0f, 0.95f);
+                default: return new Color(0f, 1f, 1f, 0.95f);
             }
         }
 
-        // 便签行的字色：赃物、违禁品保持原来的琥珀和红，其余标签一律蓝色。
+        // 便签行的字色：赃物用标准橙，违禁品用品红，其余标签一律蓝色。
         public static Color ColorOf(string id)
         {
             if (id == ModIds.Stolen) return OutlineColor(HighlightStyle.Stolen);

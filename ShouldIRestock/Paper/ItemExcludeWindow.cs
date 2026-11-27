@@ -161,6 +161,19 @@ namespace ShouldIRestock
             try
             {
                 builder.BeginColumn(inner);
+                builder.AddLabel(Text.L("opt_note_side", "Note side"), "label_note_side");
+                builder.AddDropdown(
+                    new System.Collections.Generic.List<string>
+                    {
+                        Text.L("opt_note_left", "Left"),
+                        Text.L("opt_note_right", "Right")
+                    },
+                    GeneralOptions.NoteOnRight ? 1 : 0,
+                    index => GeneralChanged(() => GeneralOptions.SetNoteOnRight(index == 1)),
+                    "opt_note_side");
+                AddTip(builder, Text.L("opt_note_side_tip", "Left sits under the phone. Right sits to the right of the recorder."), "tip_note_side");
+                builder.End();
+                builder.BeginColumn(inner);
                 builder.AddToggle(
                     Text.L("opt_ignore_locked", "Skip goods inside locked containers"),
                     GeneralOptions.IgnoreLocked,
