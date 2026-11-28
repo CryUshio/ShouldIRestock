@@ -70,7 +70,7 @@ namespace ShouldIRestock
                 return;
             }
 
-            if (Legality.IsBehindLock(item))
+            if (Settings.IgnoreLocked && Legality.HiddenByLock(item))
             {
                 return;
             }

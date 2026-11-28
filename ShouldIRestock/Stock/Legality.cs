@@ -60,6 +60,22 @@ namespace ShouldIRestock
 
         public static bool IsLockedContainer(GameItem item)
         {
+            if (item == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                if (item.contentWindow != null && item.contentWindow.isLocked)
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+            }
+
             if (!TagCatalog.Has(item, "LOCKED_CONTAINER_TAG"))
             {
                 return false;
@@ -74,6 +90,60 @@ namespace ShouldIRestock
             {
                 return true;
             }
+        }
+
+        // 锁着的箱子放进别的容器后，扫描会把箱子和里面的货摊平。
+        // 游戏只给直接放进去的货打锁后标记，更里面的货要顺着外层容器往上查。
+        public static bool HiddenByLock(GameItem item)
+        {
+            if (item == null || IsBehindLock(item))
+            {
+                return item != null;
+            }
+
+            var seen = new System.Collections.Generic.HashSet<GameItem>();
+            GameItem current = item;
+            for (int i = 0; i < 16 && current != null && seen.Add(current); i++)
+            {
+                GameInventory inventory = null;
+                try
+                {
+                    inventory = current.parentInventory;
+                }
+                catch
+                {
+                    inventory = null;
+                }
+
+                if (inventory == null)
+                {
+                    return false;
+                }
+
+                GameItem owner = null;
+                try
+                {
+                    owner = inventory.GetParentItem();
+                }
+                catch
+                {
+                    owner = null;
+                }
+
+                if (owner == null || owner == current)
+                {
+                    return false;
+                }
+
+                if (IsLockedContainer(owner))
+                {
+                    return true;
+                }
+
+                current = owner;
+            }
+
+            return false;
         }
     }
 }
